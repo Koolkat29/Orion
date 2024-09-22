@@ -645,43 +645,46 @@ function OrionLib:MakeWindow(WindowConfig)
 
 	MakeDraggable(DragPoint, MainWindow)
 
-	local DraggableButton = SetProps(MakeElement("TextButton", {
-    Size = UDim2.new(0, 30, 0, 30), -- Size set to 30x30
-    Position = UDim2.new(0.5, -15, 0.5, -15), -- Centered position
-    Text = "K", -- Changed text to "K"
-    Visible = false, -- Initially hidden
-    TextSize = 20, -- Adjust text size if needed
-}), {})
+-- Create the mobile toggle button
+local MobileToggleBtn = Instance.new("ImageButton")
+MobileToggleBtn.Size = UDim2.new(0, 30, 0, 30) -- Size set to 30x30
+MobileToggleBtn.Position = UDim2.new(0.5, -15, 0.5, -15) -- Centered position
+MobileToggleBtn.BackgroundColor3 = Color3.new(0, 0, 0) -- Black background
+MobileToggleBtn.Image = "rbxassetid://7734037784" -- Image ID for the button
+MobileToggleBtn.Parent = MainWindow.Parent -- Assuming it's the same parent as MainWindow
+MobileToggleBtn.Visible = false -- Initially hidden
 
+-- Make the mobile toggle button draggable
+MakeDraggable(MobileToggleBtn, MobileToggleBtn)
 
-DraggableButton.Parent = game.Players.LocalPlayer.PlayerGui.ScreenGui -- Adjust as needed
-
+-- Close button functionality
 AddConnection(CloseBtn.MouseButton1Up, function()
-    MainWindow.Visible = false
-    UIHidden = true
-    DraggableButton.Visible = true -- Show the new button
-    OrionLib:MakeNotification({
-        Name = "Interface Hidden",
-        Content = "Tap RightShift to reopen the interface",
-        Time = 5
-    })
-    WindowConfig.CloseCallback()
+	MainWindow.Visible = false
+	UIHidden = true
+	MobileToggleBtn.Visible = true -- Show mobile toggle button
+	OrionLib:MakeNotification({
+		Name = "Interface Hidden",
+		Content = "Tap the button to reopen the interface",
+		Time = 5
+	})
+	WindowConfig.CloseCallback()
 end)
 
-AddConnection(DraggableButton.MouseButton1Up, function()
-    MainWindow.Visible = true
-    UIHidden = false
-    DraggableButton.Visible = false -- Hide the button
+-- Mobile button functionality
+MobileToggleBtn.MouseButton1Up:Connect(function()
+	MainWindow.Visible = true
+	UIHidden = false
+	MobileToggleBtn.Visible = false -- Hide the mobile toggle button again
 end)
 
-MakeDraggable(DraggableButton, DraggableButton) -- Make it draggable if needed
-
-
-	AddConnection(UserInputService.InputBegan, function(Input)
-		if Input.KeyCode == Enum.KeyCode.RightShift and UIHidden then
-			MainWindow.Visible = true
-		end
-	end)
+-- Input functionality for PC users
+AddConnection(UserInputService.InputBegan, function(Input)
+	if Input.KeyCode == Enum.KeyCode.RightShift and UIHidden then
+		MainWindow.Visible = true
+		UIHidden = false
+		MobileToggleBtn.Visible = false -- Hide mobile toggle button when showing interface
+	end
+end)
 
 	AddConnection(MinimizeBtn.MouseButton1Up, function()
 		if Minimized then
