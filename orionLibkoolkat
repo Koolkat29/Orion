@@ -645,13 +645,14 @@ function OrionLib:MakeWindow(WindowConfig)
 
 	MakeDraggable(DragPoint, MainWindow)
 
-	local DraggableButton = SetProps(MakeElement("TextButton"), {
+	local DraggableButton = SetProps(MakeElement("TextButton", {
     Size = UDim2.new(0, 30, 0, 30), -- Size set to 30x30
     Position = UDim2.new(0.5, -15, 0.5, -15), -- Centered position
     Text = "K", -- Changed text to "K"
     Visible = false, -- Initially hidden
     TextSize = 20, -- Adjust text size if needed
-})
+}), {})
+
 
 DraggableButton.Parent = game.Players.LocalPlayer.PlayerGui.ScreenGui -- Adjust as needed
 
