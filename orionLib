@@ -464,7 +464,7 @@ end
 
 function OrionLib:MakeWindow(WindowConfig)
 	local FirstTab = true
-	local Minimized = true
+	local Minimized = false
 	local Loaded = false
 	local UIHidden = false
 
@@ -626,6 +626,7 @@ function OrionLib:MakeWindow(WindowConfig)
 					Size = UDim2.new(0, 1, 1, 0),
 					Position = UDim2.new(0.5, 0, 0, 0)
 				}), "Stroke"), 
+				CloseBtn,
 				MinimizeBtn
 			}), "Second"), 
 		}),
