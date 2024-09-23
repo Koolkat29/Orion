@@ -647,12 +647,14 @@ function OrionLib:MakeWindow(WindowConfig)
 
 -- Create the mobile toggle button
 local MobileToggleBtn = Instance.new("ImageButton")
-MobileToggleBtn.Size = UDim2.new(0, 30, 0, 30) -- Size set to 30x30
-MobileToggleBtn.Position = UDim2.new(0.5, -15, 0.5, -15) -- Centered position
-MobileToggleBtn.BackgroundColor3 = Color3.new(0, 0, 0) -- Black background
-MobileToggleBtn.Image = "rbxassetid://7734037784" -- Image ID for the button
-MobileToggleBtn.Parent = MainWindow.Parent -- Assuming it's the same parent as MainWindow
-MobileToggleBtn.Visible = false -- Initially hidden
+MobileToggleBtn.Size = UDim2.new(0, 30, 0, 30)
+MobileToggleBtn.Position = UDim2.new(0.5, -15, 0.5, -15)
+MobileToggleBtn.BackgroundColor3 = Color3.new(0, 0, 0)
+MobileToggleBtn.Image = "rbxassetid://7734040271"
+MobileToggleBtn.Parent = MainWindow.Parent
+MobileToggleBtn.Visible = false
+MobileToggleBtn.BackgroundTransparency = 1
+
 
 -- Make the mobile toggle button draggable
 MakeDraggable(MobileToggleBtn, MobileToggleBtn)
