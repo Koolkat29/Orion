@@ -673,11 +673,28 @@ AddConnection(CloseBtn.MouseButton1Up, function()
 end)
 
 -- Mobile button functionality
-MobileToggleBtn.MouseButton1Up:Connect(function()
-	MainWindow.Visible = true
-	UIHidden = false
-	MobileToggleBtn.Visible = false -- Hide the mobile toggle button again
+local isTogglebtnDragging = false
+
+local function TogglebtnClick()
+    MainWindow.Visible = true
+    UIHidden = false
+    MobileToggleBtn.Visible = false
+end
+
+MobileToggleBtn.MouseButton1Down:Connect(function()
+    isTogglebtnDragging = false
 end)
+
+MobileToggleBtn.MouseMoved:Connect(function()
+    isTogglebtnDragging = true
+end)
+
+MobileToggleBtn.MouseButton1Up:Connect(function()
+    if not isTogglebtnDragging then
+        TogglebtnClick()
+    end
+end)
+
 
 -- Input functionality for PC users
 AddConnection(UserInputService.InputBegan, function(Input)
