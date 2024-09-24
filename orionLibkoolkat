@@ -646,10 +646,10 @@ function OrionLib:MakeWindow(WindowConfig)
 	MakeDraggable(DragPoint, MainWindow)
 
 local MobileToggleBtn = Instance.new("ImageButton")
-MobileToggleBtn.Size = UDim2.new(0, 30, 0, 30)
+MobileToggleBtn.Size = UDim2.new(0, 40, 0, 40)
 MobileToggleBtn.Position = UDim2.new(0.5, -15, 0.5, -15)
 MobileToggleBtn.BackgroundColor3 = Color3.new(0, 0, 0)
-MobileToggleBtn.Image = "rbxassetid://7734040271"
+MobileToggleBtn.Image = "rbxassetid://7733993211"
 MobileToggleBtn.Parent = MainWindow.Parent
 MobileToggleBtn.Visible = false
 MobileToggleBtn.BackgroundTransparency = 0.6
