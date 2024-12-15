@@ -1,5 +1,3 @@
-
-
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
@@ -35,7 +33,7 @@ local Success, Response = pcall(function()
 end)
 
 if not Success then
-	warn("\nOrion Library - Failed to load Feather Icons. Error code: " .. Response .. "\n")
+--	warn("\nOrion Library - Failed to load Feather Icons. --Error code: " .. Response .. "\n")
 end	
 
 local function GetIcon(IconName)
@@ -101,7 +99,7 @@ local function MakeDraggable(DragPoint, Main)
 	pcall(function()
 		local Dragging, DragInput, MousePos, FramePos = false
 		AddConnection(DragPoint.InputBegan, function(Input)
-			if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+			if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
 				Dragging = true
 				MousePos = Input.Position
 				FramePos = Main.Position
@@ -114,7 +112,7 @@ local function MakeDraggable(DragPoint, Main)
 			end
 		end)
 		AddConnection(DragPoint.InputChanged, function(Input)
-			if Input.UserInputType == Enum.UserInputType.MouseMovement then
+			if Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch then
 				DragInput = Input
 			end
 		end)
@@ -628,8 +626,8 @@ function OrionLib:MakeWindow(WindowConfig)
 					Size = UDim2.new(0, 1, 1, 0),
 					Position = UDim2.new(0.5, 0, 0, 0)
 				}), "Stroke"), 
-				CloseBtn,
-				MinimizeBtn
+				CloseBtn
+				--MinimizeBtn
 			}), "Second"), 
 		}),
 		DragPoint,
@@ -647,22 +645,65 @@ function OrionLib:MakeWindow(WindowConfig)
 
 	MakeDraggable(DragPoint, MainWindow)
 
-	AddConnection(CloseBtn.MouseButton1Up, function()
-		MainWindow.Visible = false
-		UIHidden = true
-		OrionLib:MakeNotification({
-			Name = "Interface Hidden",
-			Content = "Tap RightShift to reopen the interface",
-			Time = 5
-		})
-		WindowConfig.CloseCallback()
-	end)
+local MobileToggleBtn = Instance.new("ImageButton")
+MobileToggleBtn.Size = UDim2.new(0, 40, 0, 40)
+MobileToggleBtn.Position = UDim2.new(0.5, -15, 0.5, -15)
+MobileToggleBtn.BackgroundColor3 = Color3.new(0, 0, 0)
+MobileToggleBtn.Image = "rbxassetid://7733993211"
+MobileToggleBtn.Parent = MainWindow.Parent
+MobileToggleBtn.Visible = false
+MobileToggleBtn.BackgroundTransparency = 0.6
 
-	AddConnection(UserInputService.InputBegan, function(Input)
-		if Input.KeyCode == Enum.KeyCode.RightShift and UIHidden then
-			MainWindow.Visible = true
-		end
-	end)
+-- Create a UICorner to make the button round
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0.5, 0) -- This makes the button round
+UICorner.Parent = MobileToggleBtn
+
+
+
+-- Make the mobile toggle button draggable
+MakeDraggable(MobileToggleBtn, MobileToggleBtn)
+
+-- Close button functionality
+AddConnection(CloseBtn.MouseButton1Up, function()
+	MainWindow.Visible = false
+	UIHidden = true
+	MobileToggleBtn.Visible = true -- Show mobile toggle button
+	WindowConfig.CloseCallback()
+end)
+
+-- Mobile button functionality
+local isTogglebtnDragging = false
+
+local function TogglebtnClick()
+    MainWindow.Visible = true
+    UIHidden = false
+    MobileToggleBtn.Visible = false
+end
+
+MobileToggleBtn.MouseButton1Down:Connect(function()
+    isTogglebtnDragging = false
+end)
+
+MobileToggleBtn.MouseMoved:Connect(function()
+    isTogglebtnDragging = true
+end)
+
+MobileToggleBtn.MouseButton1Up:Connect(function()
+    if not isTogglebtnDragging then
+        TogglebtnClick()
+    end
+end)
+
+
+-- Input functionality for PC users
+AddConnection(UserInputService.InputBegan, function(Input)
+	if Input.KeyCode == Enum.KeyCode.RightShift and UIHidden then
+		MainWindow.Visible = true
+		UIHidden = false
+		MobileToggleBtn.Visible = false -- Hide mobile toggle button when showing interface
+	end
+end)
 
 	AddConnection(MinimizeBtn.MouseButton1Up, function()
 		if Minimized then
@@ -1055,18 +1096,18 @@ function OrionLib:MakeWindow(WindowConfig)
 				}), "Second")
 
 				SliderBar.InputBegan:Connect(function(Input)
-					if Input.UserInputType == Enum.UserInputType.MouseButton1 then 
+					if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then 
 						Dragging = true 
 					end 
 				end)
 				SliderBar.InputEnded:Connect(function(Input) 
-					if Input.UserInputType == Enum.UserInputType.MouseButton1 then 
+					if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then 
 						Dragging = false 
 					end 
 				end)
 
 				UserInputService.InputChanged:Connect(function(Input)
-					if Dragging and Input.UserInputType == Enum.UserInputType.MouseMovement then 
+					if Dragging and Input.UserInputType == Enum.UserInputType.MouseMovement or Input.UserInputType == Enum.UserInputType.Touch then 
 						local SizeScale = math.clamp((Input.Position.X - SliderBar.AbsolutePosition.X) / SliderBar.AbsoluteSize.X, 0, 1)
 						Slider:Set(SliderConfig.Min + ((SliderConfig.Max - SliderConfig.Min) * SizeScale)) 
 						SaveCfg(game.GameId)
