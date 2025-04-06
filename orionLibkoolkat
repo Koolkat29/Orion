@@ -760,7 +760,12 @@ end)
 
 	if WindowConfig.IntroEnabled then
 		LoadSequence()
-	end	
+	end
+
+-- Force GUI to be hidden after loading
+MainWindow.Visible = false
+UIHidden = true
+MobileToggleBtn.Visible = true
 
 	local TabFunction = {}
 	function TabFunction:MakeTab(TabConfig)
